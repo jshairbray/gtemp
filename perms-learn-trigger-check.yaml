@@ -1,0 +1,22 @@
+build:
+  images:
+  - gcr.io/my-generic-project-504019/github.com/jshairbray/perms-learn:$COMMIT_SHA
+  options: {logging: CLOUD_LOGGING_ONLY}
+  steps:
+  - args:
+    - pack
+    - build
+    - gcr.io/my-generic-project-504019/github.com/jshairbray/perms-learn:$COMMIT_SHA
+    - --builder
+    - gcr.io/buildpacks/builder
+    name: gcr.io/k8s-skaffold/pack
+createTime: '2026-09-20T19:21:45.246710982Z'
+github:
+  name: perms-learn
+  owner: jshairbray
+  push:
+    branch: ^main$
+id: 00a8c875-5314-4771-8a01-66af230db2a9
+name: perms-learn
+resourceName: projects/my-generic-project-504019/locations/us-central1/triggers/00a8c875-5314-4771-8a01-66af230db2a9
+serviceAccount: projects/my-generic-project-504019/serviceAccounts/767471978058-compute@developer.gserviceaccount.com

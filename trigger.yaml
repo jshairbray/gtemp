@@ -1,0 +1,22 @@
+build:
+  images:
+  - gcr.io/my-generic-project-504019/github.com/jshairbray/gtemp:$COMMIT_SHA
+  options: {}
+  steps:
+  - args:
+    - pack
+    - build
+    - gcr.io/my-generic-project-504019/github.com/jshairbray/gtemp:$COMMIT_SHA
+    - --builder
+    - gcr.io/buildpacks/builder
+    name: gcr.io/k8s-skaffold/pack
+createTime: '2026-09-20T18:38:45.127650286Z'
+github:
+  name: gtemp
+  owner: jshairbray
+  push:
+    branch: ^main$
+id: 7a66d2ec-fac1-4a96-a30e-c1df5c89bd27
+name: gtemp
+resourceName: projects/my-generic-project-504019/locations/us-central1/triggers/7a66d2ec-fac1-4a96-a30e-c1df5c89bd27
+serviceAccount: projects/my-generic-project-504019/serviceAccounts/767471978058-compute@developer.gserviceaccount.com

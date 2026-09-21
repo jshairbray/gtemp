@@ -1,0 +1,76 @@
+build:
+  images:
+  - $_AR_HOSTNAME/$_AR_PROJECT_ID/$_AR_REPOSITORY/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA
+  options:
+    logging: CLOUD_LOGGING_ONLY
+    substitutionOption: ALLOW_LOOSE
+  steps:
+  - args:
+    - build
+    - $_AR_HOSTNAME/$_AR_PROJECT_ID/$_AR_REPOSITORY/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA
+    - --builder=gcr.io/buildpacks/builder:latest
+    - --network=cloudbuild
+    - --publish
+    - --path=.
+    entrypoint: pack
+    id: Buildpack
+    name: gcr.io/k8s-skaffold/pack
+  - args:
+    - pull
+    - $_AR_HOSTNAME/$_AR_PROJECT_ID/$_AR_REPOSITORY/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA
+    id: Pull
+    name: gcr.io/cloud-builders/docker
+  - args:
+    - push
+    - $_AR_HOSTNAME/$_AR_PROJECT_ID/$_AR_REPOSITORY/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA
+    id: Push
+    name: gcr.io/cloud-builders/docker
+  - args:
+    - run
+    - services
+    - update
+    - $_SERVICE_NAME
+    - --platform=managed
+    - --image=$_AR_HOSTNAME/$_AR_PROJECT_ID/$_AR_REPOSITORY/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA
+    - --labels=managed-by=gcp-cloud-build-deploy-cloud-run,commit-sha=$COMMIT_SHA,gcb-build-id=$BUILD_ID,gcb-trigger-id=$_TRIGGER_ID
+    - --region=$_DEPLOY_REGION
+    - --quiet
+    entrypoint: gcloud
+    id: Deploy
+    name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
+  substitutions:
+    _AR_HOSTNAME: us-central1-docker.pkg.dev
+    _AR_PROJECT_ID: my-generic-project-504019
+    _AR_REPOSITORY: cloud-run-source-deploy
+    _DEPLOY_REGION: us-central1
+    _PLATFORM: managed
+    _SERVICE_NAME: test
+    _TRIGGER_ID: d4d17317-c057-4396-a1dd-bf69b3cb8ad1
+  tags:
+  - gcp-cloud-build-deploy-cloud-run
+  - gcp-cloud-build-deploy-cloud-run-managed
+  - test
+createTime: '2026-09-20T19:43:09.330654297Z'
+description: Build and deploy to Cloud Run service test on push to "^main$"
+github:
+  name: perms-learn
+  owner: jshairbray
+  push:
+    branch: ^main$
+id: d4d17317-c057-4396-a1dd-bf69b3cb8ad1
+includeBuildLogs: INCLUDE_BUILD_LOGS_WITH_STATUS
+name: rmgpgab-test-us-central1-jshairbray-perms-learn--maypg
+resourceName: projects/my-generic-project-504019/locations/global/triggers/d4d17317-c057-4396-a1dd-bf69b3cb8ad1
+serviceAccount: projects/my-generic-project-504019/serviceAccounts/767471978058-compute@developer.gserviceaccount.com
+substitutions:
+  _AR_HOSTNAME: us-central1-docker.pkg.dev
+  _AR_PROJECT_ID: my-generic-project-504019
+  _AR_REPOSITORY: cloud-run-source-deploy
+  _DEPLOY_REGION: us-central1
+  _PLATFORM: managed
+  _SERVICE_NAME: test
+  _TRIGGER_ID: d4d17317-c057-4396-a1dd-bf69b3cb8ad1
+tags:
+- gcp-cloud-build-deploy-cloud-run
+- gcp-cloud-build-deploy-cloud-run-managed
+- test
